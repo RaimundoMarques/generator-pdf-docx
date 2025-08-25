@@ -1,6 +1,11 @@
 from docx import Document
-from docx2pdf import convert  # Biblioteca para converter DOCX em PDF
 import os
+import subprocess
+import platform
+try:
+    from docx2pdf import convert as docx2pdf_convert
+except ImportError:
+    docx2pdf_convert = None
 
 class GeradorCurriculo:
     def __init__(self, dados_pessoais):
@@ -58,17 +63,21 @@ class GeradorCurriculo:
         for idioma in self.dados['idiomas']:
             self.doc.add_paragraph(f"• {idioma['idioma']}: {idioma['nivel']}")
     
-    def gerar_curriculo(self, nome_arquivo_docx="Curriculo.docx", sobrescrever=True):
+    def gerar_curriculo(self, nome_arquivo_docx="Curriculo_Raimundo_Marques.docx", sobrescrever=True):
         try:
-            # Verificar se arquivos existem e perguntar se deve sobrescrever
-            nome_arquivo_pdf = nome_arquivo_docx.replace(".docx", ".pdf")
-            
-            if not sobrescrever and (os.path.exists(nome_arquivo_docx) or os.path.exists(nome_arquivo_pdf)):
-                resposta = input(f"Arquivos já existem. Deseja sobrescrever? (s/n): ").lower()
+            pasta_destino = "Docs"
+            if not os.path.exists(pasta_destino):
+                os.makedirs(pasta_destino)
+
+            caminho_docx = os.path.join(pasta_destino, nome_arquivo_docx)
+            caminho_pdf = caminho_docx.replace(".docx", ".pdf")
+
+            if not sobrescrever and (os.path.exists(caminho_docx) or os.path.exists(caminho_pdf)):
+                resposta = input(f"Arquivos já existem em {pasta_destino}. Deseja sobrescrever? (s/n): ").lower()
                 if resposta not in ['s', 'sim', 'y', 'yes']:
                     print("Operação cancelada.")
                     return False
-            
+
             self.adicionar_cabecalho()
             self.adicionar_objetivo()
             self.adicionar_experiencia()
@@ -78,15 +87,32 @@ class GeradorCurriculo:
             self.adicionar_competencias()
             self.adicionar_informacoes_adicionais()
             self.adicionar_idiomas()
-            
+
             # Salvar DOCX
-            self.doc.save(nome_arquivo_docx)
-            print(f"DOCX gerado com sucesso! Arquivo: {nome_arquivo_docx}")
-            
-            # Converter para PDF
-            convert(nome_arquivo_docx, nome_arquivo_pdf)
-            print(f"PDF gerado com sucesso! Arquivo: {nome_arquivo_pdf}")
-            
+            self.doc.save(caminho_docx)
+            print(f"DOCX gerado com sucesso! Arquivo: {caminho_docx}")
+
+            # Converter para PDF conforme o sistema operacional
+            sistema = platform.system().lower()
+            if sistema == "windows":
+                if docx2pdf_convert is not None:
+                    try:
+                        docx2pdf_convert(caminho_docx, caminho_pdf)
+                        print(f"PDF gerado com sucesso! Arquivo: {caminho_pdf}")
+                    except Exception as conv_err:
+                        print(f"DOCX gerado, mas falha ao converter para PDF (docx2pdf): {conv_err}")
+                else:
+                    print("docx2pdf não está instalado. Instale com 'pip install docx2pdf'.")
+            else:
+                # Linux e outros sistemas
+                try:
+                    subprocess.run([
+                        "libreoffice", "--headless", "--convert-to", "pdf", "--outdir", pasta_destino, caminho_docx
+                    ], check=True)
+                    print(f"PDF gerado com sucesso! Arquivo: {caminho_pdf}")
+                except Exception as conv_err:
+                    print(f"DOCX gerado, mas falha ao converter para PDF (libreoffice): {conv_err}")
+
             return True
         except Exception as e:
             print(f"Erro ao gerar currículo: {e}")
@@ -133,7 +159,7 @@ def main():
         'formacao': [
             {
                 'curso': "Pós-Graduando em Engenharia de Software – UNIFAVIP Wyden – Martha Falcão, Manaus",
-                'periodo': "Janeiro de 2024 - Dezembro de 2025 (Cursando – atualmente no 3º módulo de 4)",
+                'periodo': "Janeiro de 2024 - Dezembro de 2025",
                 'status': "Cursando",
                 'tipo': "Especialização",
                 'campus': "Polo Universitário – Caruaru – PE"
