@@ -61,7 +61,7 @@ class GeradorCurriculo:
     def adicionar_idiomas(self):
         self.doc.add_heading("Idiomas", level=1)
         for idioma in self.dados['idiomas']:
-            self.doc.add_paragraph(f"• {idioma['idioma']}: {idioma['nivel']}")
+            self.doc.add_paragraph(f"• {idioma['idioma']}")
     
     def gerar_curriculo(self, nome_arquivo_docx="Curriculo_Raimundo_Marques.docx", sobrescrever=True):
         try:
@@ -188,8 +188,7 @@ def main():
         ],
         'idiomas': [
             {
-                'idioma': "Inglês",
-                'nivel': "Básico / Intermediário (Cursando)"
+                'idioma': "Inglês técnico"
             }
         ]
     }
