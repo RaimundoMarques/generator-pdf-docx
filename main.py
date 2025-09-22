@@ -112,6 +112,7 @@ class GeradorCurriculo:
                     print("Operação cancelada.")
                     return False
 
+            # Adiciona conteúdo no documento
             self.adicionar_cabecalho()
             self.adicionar_objetivo()
             self.adicionar_experiencia()
@@ -151,21 +152,36 @@ class GeradorCurriculo:
                 except Exception as conv_err:
                     print(f"DOCX gerado, mas falha ao converter para PDF (libreoffice): {conv_err}")
 
-            # Comprimir o PDF se foi gerado com sucesso
+            # Comprimir o PDF e garantir <= 4MB
             if pdf_gerado and os.path.exists(caminho_pdf):
                 tamanho_antes = os.path.getsize(caminho_pdf) / (1024 * 1024)  # MB
-                if self.comprimir_pdf(caminho_pdf):
-                    tamanho_depois = os.path.getsize(caminho_pdf) / (1024 * 1024)  # MB
-                    reducao = ((tamanho_antes - tamanho_depois) / tamanho_antes) * 100
-                    print(f"PDF comprimido: {tamanho_antes:.2f}MB → {tamanho_depois:.2f}MB (redução de {reducao:.1f}%)")
-                else:
-                    print(f"PDF não foi comprimido. Tamanho: {tamanho_antes:.2f}MB")
+                print(f"Tamanho inicial do PDF: {tamanho_antes:.2f}MB")
+
+                try:
+                    tmp_pdf = caminho_pdf + ".tmp.pdf"
+                    subprocess.run([
+                        "gs", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4",
+                        "-dPDFSETTINGS=/ebook",   # /screen (mais leve), /ebook (qualidade boa)
+                        "-dNOPAUSE", "-dQUIET", "-dBATCH",
+                        f"-sOutputFile={tmp_pdf}", caminho_pdf
+                    ], check=True)
+
+                    tamanho_depois = os.path.getsize(tmp_pdf) / (1024 * 1024)
+                    if tamanho_depois <= 4:
+                        os.replace(tmp_pdf, caminho_pdf)  # substitui o original
+                        reducao = ((tamanho_antes - tamanho_depois) / tamanho_antes) * 100
+                        print(f"✅ PDF comprimido: {tamanho_antes:.2f}MB → {tamanho_depois:.2f}MB (redução {reducao:.1f}%)")
+                    else:
+                        print(f"⚠️ Mesmo após compressão, PDF tem {tamanho_depois:.2f}MB (> 4MB)")
+                except Exception as e:
+                    print(f"Erro ao tentar comprimir PDF com Ghostscript: {e}")
 
             return True
         except Exception as e:
             print(f"Erro ao gerar currículo: {e}")
             return False
 
+   
 def main():
     dados_pessoais = {
         'nome': "Raimundo Marques de Freitas Filho",
