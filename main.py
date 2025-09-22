@@ -7,6 +7,14 @@ try:
 except ImportError:
     docx2pdf_convert = None
 
+# Adicionar suporte para compressão de PDF
+try:
+    from PyPDF2 import PdfWriter, PdfReader
+    import io
+    PDF_COMPRESSION_AVAILABLE = True
+except ImportError:
+    PDF_COMPRESSION_AVAILABLE = False
+
 class GeradorCurriculo:
     def __init__(self, dados_pessoais):
         self.dados = dados_pessoais
@@ -16,11 +24,11 @@ class GeradorCurriculo:
         self.doc.add_heading(self.dados['nome'], level=0)
         
         # Endereço
-        endereco = f"📍 {self.dados['endereco']}"
+        endereco = f"Endereço: {self.dados['endereco']}"
         self.doc.add_paragraph(endereco)
         
         # Contatos
-        contatos = f"📱 {self.dados['telefone']} | 📧 {self.dados['email']} | 🔗 {self.dados['linkedin']}"
+        contatos = f"Telefone: {self.dados['telefone']} | Email: {self.dados['email']} | LinkedIn: {self.dados['linkedin']}"
         self.doc.add_paragraph(contatos)
     
     def adicionar_objetivo(self):
@@ -63,6 +71,32 @@ class GeradorCurriculo:
         for idioma in self.dados['idiomas']:
             self.doc.add_paragraph(f"• {idioma['idioma']}")
     
+    def comprimir_pdf(self, caminho_pdf):
+        """Comprime o PDF para reduzir o tamanho do arquivo"""
+        if not PDF_COMPRESSION_AVAILABLE:
+            return False
+        
+        try:
+            # Ler o PDF original
+            with open(caminho_pdf, 'rb') as file:
+                reader = PdfReader(file)
+                writer = PdfWriter()
+                
+                # Copiar todas as páginas
+                for page in reader.pages:
+                    # Comprimir a página
+                    page.compress_content_streams()
+                    writer.add_page(page)
+                
+                # Salvar o PDF comprimido
+                with open(caminho_pdf, 'wb') as output_file:
+                    writer.write(output_file)
+            
+            return True
+        except Exception as e:
+            print(f"Erro ao comprimir PDF: {e}")
+            return False
+    
     def gerar_curriculo(self, nome_arquivo_docx="Curriculo_Raimundo_Marques.docx", sobrescrever=True):
         try:
             pasta_destino = "Docs"
@@ -94,10 +128,13 @@ class GeradorCurriculo:
 
             # Converter para PDF conforme o sistema operacional
             sistema = platform.system().lower()
+            pdf_gerado = False
+            
             if sistema == "windows":
                 if docx2pdf_convert is not None:
                     try:
                         docx2pdf_convert(caminho_docx, caminho_pdf)
+                        pdf_gerado = True
                         print(f"PDF gerado com sucesso! Arquivo: {caminho_pdf}")
                     except Exception as conv_err:
                         print(f"DOCX gerado, mas falha ao converter para PDF (docx2pdf): {conv_err}")
@@ -109,9 +146,20 @@ class GeradorCurriculo:
                     subprocess.run([
                         "libreoffice", "--headless", "--convert-to", "pdf", "--outdir", pasta_destino, caminho_docx
                     ], check=True)
+                    pdf_gerado = True
                     print(f"PDF gerado com sucesso! Arquivo: {caminho_pdf}")
                 except Exception as conv_err:
                     print(f"DOCX gerado, mas falha ao converter para PDF (libreoffice): {conv_err}")
+
+            # Comprimir o PDF se foi gerado com sucesso
+            if pdf_gerado and os.path.exists(caminho_pdf):
+                tamanho_antes = os.path.getsize(caminho_pdf) / (1024 * 1024)  # MB
+                if self.comprimir_pdf(caminho_pdf):
+                    tamanho_depois = os.path.getsize(caminho_pdf) / (1024 * 1024)  # MB
+                    reducao = ((tamanho_antes - tamanho_depois) / tamanho_antes) * 100
+                    print(f"PDF comprimido: {tamanho_antes:.2f}MB → {tamanho_depois:.2f}MB (redução de {reducao:.1f}%)")
+                else:
+                    print(f"PDF não foi comprimido. Tamanho: {tamanho_antes:.2f}MB")
 
             return True
         except Exception as e:
