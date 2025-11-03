@@ -222,9 +222,9 @@ def main():
         ],
         'formacao': [
             {
-                'curso': "Pós-Graduando em Engenharia de Software – UNIFAVIP Wyden – Martha Falcão, Manaus",
+                'curso': "Pós-Graduado em Engenharia de Software – UNIFAVIP Wyden – Martha Falcão, Manaus",
                 'periodo': "Janeiro de 2024 - Dezembro de 2025",
-                'status': "Cursando",
+                'status': "Concluído",
                 'tipo': "Especialização",
                 'campus': "Polo Universitário – Caruaru – PE"
             },
