@@ -242,8 +242,31 @@ def main():
             "Certificação MCSA SQL Server Database Administration - Udemy",
             "Certificação Java - Udemy"
         ],
-        'skills': "• Linguagens & Frameworks: PHP (P.O.O, PHP Nativo, Laravel 9, AdonisJS), Javascript, TypeScript, Node.js, NestJS, Vue 3, React JS, C# Blazor\n• Banco de Dados: MySQL (Certificação 40h), PostgreSQL, SQL Server, MariaDB, Oracle\n• Ferramentas & DevOps: Docker, Docker-Compose, Git/GitHub (controle de versão, branching, pull requests e workflows com CI/CD)\n• APIs & Integrações: REST, SOAP, JSON\n• Testes de API: Insomnia, Postman\n• Sistemas Operacionais: Windows e Linux (principal)\n• Projetos de Sistemas: Experiência na concepção, desenvolvimento e manutenção de sistemas completos, garantindo escalabilidade, performance e boas práticas.",
-        'competencias': "• Ética, Resiliência, Organização e Planejamento\n• Pensamento analítico e resolução de problemas\n• Trabalho em equipe\n• Experiência com controle de versão utilizando Git e GitHub, incluindo boas práticas de versionamento, resolução de conflitos, uso de branches e colaboração em equipe.",
+        'skills': (
+            "• Linguagens & Frameworks: PHP (P.O.O, PHP Nativo, Laravel 9, AdonisJS), Java (Spring Boot), "
+            "Javascript, TypeScript, Node.js (NestJS, integração via JDBC com ERP TOTVS RM – módulo educacional), "
+            "Vue 3, React JS, C# / .NET (Blazor)\n"
+            "• Banco de Dados: MySQL (Certificação 40h), PostgreSQL, SQL Server, MariaDB, Oracle 11.2 "
+            "(execução em containers Docker)\n"
+            "• Banco de Dados Relacionais: Experiência com modelagem, consultas otimizadas, integrações "
+            "multiplataforma e manutenção de ambientes containerizados.\n"
+            "• Ferramentas & DevOps: Docker, Docker-Compose, Git/GitHub (controle de versão, branching, "
+            "pull requests, workflows e pipelines CI/CD em ambientes de homologação e produção)\n"
+            "• APIs & Integrações: REST, SOAP, JSON (integrações entre aplicações corporativas e ERPs TOTVS RM)\n"
+            "• Testes de Aplicação e API: Cypress, Insomnia, Postman\n"
+            "• Sistemas Operacionais: Windows e Linux (principal)\n"
+            "• Projetos de Sistemas: Experiência na concepção, desenvolvimento e manutenção de sistemas completos, "
+            "com foco em escalabilidade, performance, segurança e boas práticas (Clean Code, SOLID e Design Patterns)."
+        ),
+
+        'competencias': (
+            "• Ética, Resiliência, Organização e Planejamento\n"
+            "• Pensamento analítico e resolução de problemas\n"
+            "• Trabalho em equipe e comunicação interpessoal\n"
+            "• Experiência com versionamento e colaboração via Git/GitHub (branches, merges, resolução de conflitos)\n"
+            "• Vivência em pipelines CI/CD e integração contínua de aplicações em ambiente Dockerizado\n"
+            "• Capacidade de adaptação a novas tecnologias e frameworks."
+        ),
         'informacoes_adicionais': [
             "Documentação Completa e Atualizada",
             "CNH Cat B",
