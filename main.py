@@ -196,7 +196,7 @@ def main():
                 'cargo': "Desenvolvedor Full Stack II",
                 'periodo': "Maio de 2024 – Atual",
                 'local': "Manaus/AM",
-                'descricao': "• Desenvolvimento e manutenção de aplicações full stack.\n• Implementação de novas funcionalidades e otimização de código.\n• Integração de sistemas e APIs para aprimorar fluxos de trabalho internos.\n• Colaboração com equipes multidisciplinares para desenvolvimento de soluções inovadoras.\n• Desenvolvimento de implementações web e web/mobile.\n• Criação de soluções para linhas de montagem de equipamentos de fábricas.\n• Tecnologias mais utilizadas: Docker, Docker-Compose, Ambiente Linux, Vue 3, NestJS, React, Bootstrap, MUI React, Tailwind, Javascript, Typescript, C# Blazor."
+                'descricao': "• Desenvolvimento e manutenção de aplicações assíncronas.\n• Implementação de novas funcionalidades e otimização de código.\n• Integração de sistemas e APIs para aprimorar fluxos de trabalho internos.\n• Colaboração com equipes multidisciplinares para desenvolvimento de soluções inovadoras.\n• Desenvolvimento de implementações web e web/mobile.\n• Criação de soluções para linhas de montagem de equipamentos de fábricas.\n• Tecnologias mais utilizadas: Docker, Docker-Compose, Ambiente Linux, Vue 3, NestJS, React, Bootstrap, MUI React, Tailwind, Javascript, Typescript, C# Blazor."
             },
             {
                 'empresa': "Faculdade Metropolitana de Manaus - FAMETRO",
