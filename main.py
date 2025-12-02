@@ -185,7 +185,7 @@ class GeradorCurriculo:
 def main():
     dados_pessoais = {
         'nome': "Raimundo Marques de Freitas Filho",
-        'endereco': "Rua Henoch Reis nº 618, B da Paz - Manaus/AM - CEP: 69048-020",
+        'endereco': "Rua Celso Machado nº 67, Flores - Manaus/AM - CEP: 69028-326",
         'telefone': "+55 97 98411-1260 (WhatsApp)",
         'email': "raimundo.marques.ff@gmail.com",
         'linkedin': "https://www.linkedin.com/in/raimundo-marques-filho-06478b108/",
